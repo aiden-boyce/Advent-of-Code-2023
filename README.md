@@ -1,4 +1,4 @@
-# Advent_of_Code_2023
+# Advent of Code 2023
 My Advent of Code 2023 Journey!
 
 First time doing this. 
