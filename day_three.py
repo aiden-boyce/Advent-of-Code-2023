@@ -8,7 +8,7 @@ def find_special_indices(lines):
     # Looking for the Special Indices
     for i, line in enumerate(lines):
         for j, symbol in enumerate(line):
-            if symbol != '.' and not symbol.isnumeric():
+            if symbol != '.' and not symbol.isdigit():
                 sum += find_adj_nums(lines, i, j)
     
     return sum
@@ -16,25 +16,25 @@ def find_special_indices(lines):
 def find_adj_nums(lines, sp_i, sp_j):
     adj_nums = []
     # Adj Top Row
-    if lines[sp_i-1][sp_j-1].isnumeric():
+    if lines[sp_i-1][sp_j-1].isdigit():
         adj_nums.append([sp_i-1,sp_j-1])
-    if lines[sp_i-1][sp_j].isnumeric():
+    if lines[sp_i-1][sp_j].isdigit():
         adj_nums.append([sp_i-1,sp_j])
-    if lines[sp_i-1][sp_j+1].isnumeric():
+    if lines[sp_i-1][sp_j+1].isdigit():
         adj_nums.append([sp_i-1,sp_j+1])
     
     # Adj Mid Row
-    if lines[sp_i][sp_j-1].isnumeric():
+    if lines[sp_i][sp_j-1].isdigit():
         adj_nums.append([sp_i,sp_j-1])
-    if lines[sp_i][sp_j+1].isnumeric():
+    if lines[sp_i][sp_j+1].isdigit():
         adj_nums.append([sp_i,sp_j+1])
 
     # Adj Bot Row
-    if lines[sp_i+1][sp_j-1].isnumeric():
+    if lines[sp_i+1][sp_j-1].isdigit():
         adj_nums.append([sp_i+1,sp_j-1])
-    if lines[sp_i+1][sp_j].isnumeric():
+    if lines[sp_i+1][sp_j].isdigit():
         adj_nums.append([sp_i+1,sp_j])
-    if lines[sp_i+1][sp_j+1].isnumeric():
+    if lines[sp_i+1][sp_j+1].isdigit():
         adj_nums.append([sp_i+1,sp_j+1])
 
     return sum_adj_nums(lines, sp_i, adj_nums)
@@ -49,12 +49,12 @@ def sum_adj_nums(lines, sp_i, adj_nums):
         while j < len(lines[i]):
             symbol = lines[i][j]
             # Reached a number
-            if symbol.isnumeric():
+            if symbol.isdigit():
                 is_adj = False
                 num = ""
                 num_j = j
                 # Add the whole number to a string
-                while symbol.isnumeric():
+                while symbol.isdigit():
                     num += symbol
                     # Check if the number is adjacent to a special character
                     if [i, num_j] in adj_nums:
@@ -87,25 +87,25 @@ def find_special_gears(lines):
 def pt2_find_adj_nums(lines, sp_i, sp_j):
     adj_nums = []
     # Adj Top Row
-    if lines[sp_i-1][sp_j-1].isnumeric():
+    if lines[sp_i-1][sp_j-1].isdigit():
         adj_nums.append([sp_i-1,sp_j-1])
-    if lines[sp_i-1][sp_j].isnumeric():
+    if lines[sp_i-1][sp_j].isdigit():
         adj_nums.append([sp_i-1,sp_j])
-    if lines[sp_i-1][sp_j+1].isnumeric():
+    if lines[sp_i-1][sp_j+1].isdigit():
         adj_nums.append([sp_i-1,sp_j+1])
     
     # Adj Mid Row
-    if lines[sp_i][sp_j-1].isnumeric():
+    if lines[sp_i][sp_j-1].isdigit():
         adj_nums.append([sp_i,sp_j-1])
-    if lines[sp_i][sp_j+1].isnumeric():
+    if lines[sp_i][sp_j+1].isdigit():
         adj_nums.append([sp_i,sp_j+1])
 
     # Adj Bot Row
-    if lines[sp_i+1][sp_j-1].isnumeric():
+    if lines[sp_i+1][sp_j-1].isdigit():
         adj_nums.append([sp_i+1,sp_j-1])
-    if lines[sp_i+1][sp_j].isnumeric():
+    if lines[sp_i+1][sp_j].isdigit():
         adj_nums.append([sp_i+1,sp_j])
-    if lines[sp_i+1][sp_j+1].isnumeric():
+    if lines[sp_i+1][sp_j+1].isdigit():
         adj_nums.append([sp_i+1,sp_j+1])
     
     return get_gear_ratio(lines, sp_i, adj_nums)
@@ -122,12 +122,12 @@ def get_gear_ratio(lines, sp_i, adj_nums):
         while j < len(lines[i]):
             symbol = lines[i][j]
             # Reached a number
-            if symbol.isnumeric():
+            if symbol.isdigit():
                 is_adj = False
                 num = ""
                 num_j = j
                 # Add the whole number to a string
-                while symbol.isnumeric():
+                while symbol.isdigit():
                     num += symbol
                     # Check if the number is adjacent to a gear
                     if [i, num_j] in adj_nums:
@@ -135,7 +135,7 @@ def get_gear_ratio(lines, sp_i, adj_nums):
                     num_j += 1
                     try:
                         symbol = lines[i][num_j]
-                    except:
+                    except IndexError:
                         break
                 j = num_j
                 # Add num to list if it was adjacent

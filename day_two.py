@@ -33,7 +33,7 @@ def is_valid_game(line):
     is_valid = True
     i = 0
     while i < len(line):
-        if line[i].isnumeric():
+        if line[i].isdigit():
             num, color, space_index = get_num_color(line, i)
             is_valid = compare_pulled_to_max(num, color)
             i = space_index
@@ -47,7 +47,7 @@ def get_game_number(line):
     colon_index = 0
     seen_first_digit = False
     for i, symbol in enumerate(line):
-        if symbol.isnumeric() and not seen_first_digit:
+        if symbol.isdigit() and not seen_first_digit:
             digit_index = i
             seen_first_digit = True
         if symbol == ':':
@@ -84,7 +84,7 @@ def p2_get_num_color(line):
     max_colors = [0, 0, 0]
     i = 0
     while i < len(line):
-        if line[i].isnumeric():
+        if line[i].isdigit():
             num, color, space_index = get_num_color(line, i)
             i = space_index
             color_index, max_num = get_max_color(num, color, max_colors)

@@ -11,11 +11,11 @@ def get_calibration_value_digits(line):
     first_digit = 0
     last_digit = 0
     for symbol in line:
-        if symbol.isnumeric():
+        if symbol.isdigit():
             first_digit = int(symbol)
             break
     for symbol in line[::-1]:
-        if symbol.isnumeric():
+        if symbol.isdigit():
             last_digit = int(symbol)
             break
     
@@ -68,7 +68,7 @@ def part_two_get_calibration_value(line):
     first_digit = 0
     last_digit = 0
     for i, symbol in enumerate(line):
-        if symbol.isnumeric():
+        if symbol.isdigit():
             first_digit = int(line[i])
             break
         if get_spelled_digit(line, i):
@@ -76,7 +76,7 @@ def part_two_get_calibration_value(line):
             break
     
     for i, symbol in reversed(list(enumerate(line))):
-        if symbol.isnumeric():
+        if symbol.isdigit():
             last_digit = int(line[i])
             break
         if get_spelled_digit(line, i):
