@@ -2,16 +2,23 @@ def read_input():
     with open("inputs\input_d3.txt") as f:
         return f.read().splitlines()
 
-# Part One
+# Find special indices and gears
 def find_special_indices(lines):
-    sum = 0
+    p1_sum = 0
+    p2_sum = 0
     # Looking for the Special Indices
     for i, line in enumerate(lines):
         for j, symbol in enumerate(line):
+            # Part One: Find any special indices
             if symbol != '.' and not symbol.isdigit():
-                sum += find_adj_nums(lines, i, j)
+                adj_nums = find_adj_nums(lines, i, j)
+                p1_sum += sum_adj_nums(lines, i, adj_nums)
+            # Part Two: Find Gears
+            if symbol == '*':
+                p2_sum += get_gear_ratio(lines, i, adj_nums)
+                
     
-    return sum
+    return p1_sum, p2_sum
 
 def find_adj_nums(lines, sp_i, sp_j):
     adj_nums = []
@@ -37,7 +44,7 @@ def find_adj_nums(lines, sp_i, sp_j):
     if lines[sp_i+1][sp_j+1].isdigit():
         adj_nums.append([sp_i+1,sp_j+1])
 
-    return sum_adj_nums(lines, sp_i, adj_nums)
+    return adj_nums
 
 # PAIN
 def sum_adj_nums(lines, sp_i, adj_nums):
@@ -72,44 +79,7 @@ def sum_adj_nums(lines, sp_i, adj_nums):
     
     return sum
 
-
-# Part Two
-def find_special_gears(lines):
-    sum = 0
-    # Looking for the Special Gears
-    for i, line in enumerate(lines):
-        for j, symbol in enumerate(line):
-            if symbol == '*':
-                sum += pt2_find_adj_nums(lines, i, j)
-    
-    return sum    
-    
-def pt2_find_adj_nums(lines, sp_i, sp_j):
-    adj_nums = []
-    # Adj Top Row
-    if lines[sp_i-1][sp_j-1].isdigit():
-        adj_nums.append([sp_i-1,sp_j-1])
-    if lines[sp_i-1][sp_j].isdigit():
-        adj_nums.append([sp_i-1,sp_j])
-    if lines[sp_i-1][sp_j+1].isdigit():
-        adj_nums.append([sp_i-1,sp_j+1])
-    
-    # Adj Mid Row
-    if lines[sp_i][sp_j-1].isdigit():
-        adj_nums.append([sp_i,sp_j-1])
-    if lines[sp_i][sp_j+1].isdigit():
-        adj_nums.append([sp_i,sp_j+1])
-
-    # Adj Bot Row
-    if lines[sp_i+1][sp_j-1].isdigit():
-        adj_nums.append([sp_i+1,sp_j-1])
-    if lines[sp_i+1][sp_j].isdigit():
-        adj_nums.append([sp_i+1,sp_j])
-    if lines[sp_i+1][sp_j+1].isdigit():
-        adj_nums.append([sp_i+1,sp_j+1])
-    
-    return get_gear_ratio(lines, sp_i, adj_nums)
-
+# Part Two    
 def get_gear_ratio(lines, sp_i, adj_nums):
     # List to hold all numbers adjacent to the gear
     nums = []
@@ -155,9 +125,8 @@ def get_gear_ratio(lines, sp_i, adj_nums):
 def main():
     lines = read_input()
     
-    part_one = find_special_indices(lines)
+    part_one, part_two = find_special_indices(lines)
     print("Part One:", part_one)
-    part_two = find_special_gears(lines)
     print("Part Two:", part_two)
 
     
