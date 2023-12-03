@@ -154,10 +154,7 @@ def get_gear_ratio(lines, sp_i, adj_nums):
 # Part Two: 01:47:26   8040
 def main():
     lines = read_input()
-    # Convert all lines to char arrays
-    for i, line in enumerate(lines):
-        lines[i] = list(line)
-
+    
     part_one = find_special_indices(lines)
     print("Part One:", part_one)
     part_two = find_special_gears(lines)
