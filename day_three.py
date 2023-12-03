@@ -9,17 +9,17 @@ def find_special_indices(lines):
     # Looking for the Special Indices
     for i, line in enumerate(lines):
         for j, symbol in enumerate(line):
-            # Part One: Find any special indices
+            adj_nums = []
+            # Found a Special Character
             if symbol != '.' and not symbol.isdigit():
                 adj_nums = find_adj_nums(lines, i, j)
-                p1_sum += sum_adj_nums(lines, i, adj_nums)
-            # Part Two: Find Gears
-            if symbol == '*':
-                p2_sum += get_gear_ratio(lines, i, adj_nums)
-                
-    
+                sums = sum_adj_nums(lines, i, adj_nums, symbol)
+                p1_sum += sums[0]
+                p2_sum += sums[1]
+            
     return p1_sum, p2_sum
 
+# Find all adjacent number indices
 def find_adj_nums(lines, sp_i, sp_j):
     adj_nums = []
     # Adj Top Row
@@ -46,10 +46,14 @@ def find_adj_nums(lines, sp_i, sp_j):
 
     return adj_nums
 
-# PAIN
-def sum_adj_nums(lines, sp_i, adj_nums):
-    sum = 0
-    # Only go through rows directly above, equal to, or directly below it
+# Get the final sums of adjacent numbers for Part One and Part Two
+def sum_adj_nums(lines, sp_i, adj_nums, special_symbol):
+    # Part 1 and Part 2 return values
+    p1_sum = 0
+    p2_gear_ratio = 0
+    gear_nums = []
+
+    # Only go through rows directly above, equal to, or directly below special row
     for i in range(sp_i-1, sp_i+2):
         j = 0
         # Iterate through each column
@@ -63,9 +67,9 @@ def sum_adj_nums(lines, sp_i, adj_nums):
                 # Add the whole number to a string
                 while symbol.isdigit():
                     num += symbol
-                    # Check if the number is adjacent to a special character
+                    # Check if the number is adjacent to a special symbol
                     if [i, num_j] in adj_nums:
-                        is_adj = True
+                        is_adj = True 
                     num_j += 1
                     try:
                         symbol = lines[i][num_j]
@@ -74,51 +78,18 @@ def sum_adj_nums(lines, sp_i, adj_nums):
                 j = num_j
                 # Add num to sum if it was adjacent
                 if is_adj:
-                    sum += int(num)
-            j += 1
-    
-    return sum
+                    p1_sum += int(num) 
+                # Add num to gear_nums if it was a gear
+                if is_adj and special_symbol == '*':
+                    gear_nums.append(int(num))
 
-# Part Two    
-def get_gear_ratio(lines, sp_i, adj_nums):
-    # List to hold all numbers adjacent to the gear
-    nums = []
-    gear_ratio = 0
-
-    # Only go through rows directly above, equal to, or directly below it
-    for i in range(sp_i-1, sp_i+2):
-        j = 0
-        # Iterate through each column
-        while j < len(lines[i]):
-            symbol = lines[i][j]
-            # Reached a number
-            if symbol.isdigit():
-                is_adj = False
-                num = ""
-                num_j = j
-                # Add the whole number to a string
-                while symbol.isdigit():
-                    num += symbol
-                    # Check if the number is adjacent to a gear
-                    if [i, num_j] in adj_nums:
-                        is_adj = True
-                    num_j += 1
-                    try:
-                        symbol = lines[i][num_j]
-                    except IndexError:
-                        break
-                j = num_j
-                # Add num to list if it was adjacent
-                if is_adj:
-                    nums.append(int(num))
             j += 1
 
-    # Gear Ratio calculated with exactly two adjacent numbers
-    if len(nums) == 2:
-        gear_ratio = nums[0] * nums[1]
-    
-    return gear_ratio
-    
+    # Gear Ratio calculated only if there are exactly two adjacent numbers
+    if len(gear_nums) == 2:
+        p2_gear_ratio = gear_nums[0] * gear_nums[1]
+
+    return p1_sum, p2_gear_ratio
     
 # Part One: 01:35:27  10117
 # Part Two: 01:47:26   8040
