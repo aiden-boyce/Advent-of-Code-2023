@@ -67,14 +67,14 @@ def sum_possible_games(lines):
 # Compare current number to current max
 def get_max_color(num, color, max_colors):
     if color == 'r':
-        max_num = max(max_colors[0], num)
-        return 0, max_num
+        max_colors[0] = max(max_colors[0], num)
+        return
     if color == 'g':
-        max_num = max(max_colors[1], num)
-        return 1, max_num
+        max_colors[1] = max(max_colors[1], num)
+        return
     if color == 'b':
-        max_num = max(max_colors[2], num)
-        return 2, max_num
+        max_colors[2] = max(max_colors[2], num)
+        return
     
     
 # BRO COLOR DOES NOT LOOK LIKE A REAL WORD
@@ -87,8 +87,7 @@ def p2_get_num_color(line):
         if line[i].isdigit():
             num, color, space_index = get_num_color(line, i)
             i = space_index
-            color_index, max_num = get_max_color(num, color, max_colors)
-            max_colors[color_index] = max_num
+            get_max_color(num, color, max_colors)
         i += 1
     return max_colors
 
