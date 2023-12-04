@@ -2,6 +2,7 @@ def read_input():
     with open("inputs\input_d4.txt") as f:
         return f.read().splitlines()
 
+# Make a dictionary that adds 1 copy to each card number
 def initialize_card_copies(lines):
     card_copies = {}
     for line in lines:
@@ -11,13 +12,15 @@ def initialize_card_copies(lines):
     return card_copies
 
 def card_num_and_wins(line):
+    # Get the card number
     card_num = line[line.index(' '):line.index(':')]
     card_num = int(card_num.split()[0])
     # Split the winning numbers from the pulled numbers
-    line = line[line.index(':')+2:]
+    line = line[line.index(':')+1:]
     winning_nums, pulled_nums = line.split(' | ')
     winning_nums = winning_nums.split()
     pulled_nums = pulled_nums.split()
+
     # Get intersection of winning and pulled
     matches = list(set(winning_nums) & set(pulled_nums))
 
@@ -25,13 +28,14 @@ def card_num_and_wins(line):
 
     return card_num, wins
 
+# Add new cards
 def add_copies(card_num, wins, card_copies):
     i = 1
-    current_copies = card_copies[card_num]
+    copies_of_card_num = card_copies[card_num]
     while i <= wins:
-        next_card_copies = card_copies[card_num+i]
-        next_card_copies += current_copies
-        card_copies[card_num+i] = next_card_copies
+        copies_of_next_card = card_copies[card_num+i]
+        copies_of_next_card += copies_of_card_num
+        card_copies[card_num+i] = copies_of_next_card
         i += 1
     
 def main():
@@ -46,9 +50,9 @@ def main():
         if wins != 0:
             part_one += 2 ** (wins-1)
         # Part 2
-        card_num, wins = card_num_and_wins(line)
         add_copies(card_num, wins, card_copies)
     
+    # Count the number of cards pulled
     for value in card_copies.values():
         part_two += value
     
