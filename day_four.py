@@ -1,81 +1,59 @@
-def part_one(line):
-    # Split the winning numbers from the pulled numbers
-    line = line[line.index(':')+2:]
-    winning_nums, pulled_nums = line.split(' | ')
-    winning_nums = winning_nums.split()
-    pulled_nums = pulled_nums.split()
-    for i, num in enumerate(winning_nums):
-        winning_nums[i] = int(num)
-    for i, num in enumerate(pulled_nums):
-        pulled_nums[i] = int(num)
-    
-    count = 0
-    for num in pulled_nums:
-        if num in winning_nums:
-            count += 1
-    if count == 0:
-        return 0
-    points = 2 ** (count-1)
-    return points
+def read_input():
+    with open("inputs\input_d4.txt") as f:
+        return f.read().splitlines()
 
-card_copies = {}
 def initialize_card_copies(lines):
+    card_copies = {}
     for line in lines:
         card_num = line[line.index(' '):line.index(':')]
         card_num = int(card_num.split()[0])
         card_copies[card_num] = 1
+    return card_copies
 
-def part_two(line):
-    # Split the winning numbers from the pulled numbers
+def card_num_and_wins(line):
     card_num = line[line.index(' '):line.index(':')]
     card_num = int(card_num.split()[0])
-
+    # Split the winning numbers from the pulled numbers
     line = line[line.index(':')+2:]
     winning_nums, pulled_nums = line.split(' | ')
     winning_nums = winning_nums.split()
     pulled_nums = pulled_nums.split()
-    for i, num in enumerate(winning_nums):
-        winning_nums[i] = int(num)
-    for i, num in enumerate(pulled_nums):
-        pulled_nums[i] = int(num)
+    # Get intersection of winning and pulled
+    matches = list(set(winning_nums) & set(pulled_nums))
 
-    count = 0
-    for num in pulled_nums:
-        if num in winning_nums:
-            count += 1
+    wins = len(matches)
 
-    return card_num, count
+    return card_num, wins
 
-def add_copies(card_num, count):
+def add_copies(card_num, wins, card_copies):
     i = 1
     current_copies = card_copies[card_num]
-    while i <= count:
+    while i <= wins:
         next_card_copies = card_copies[card_num+i]
         next_card_copies += current_copies
         card_copies[card_num+i] = next_card_copies
         i += 1
-
-def read_input():
-    with open("inputs\input_d4.txt") as f:
-        return f.read().splitlines()
     
-# Really easy but I overcomplicated the second part by trying recursion :(    
-# Part One: 00:14:34   5418
-# Part Two: 01:36:54  12755
 def main():
     lines = read_input()
-    sum = 0
-    #for line in lines:
-        #sum += part_one(line)
-    #print(sum)
-    initialize_card_copies(lines)
+    part_one = 0
+    part_two = 0
+    card_copies = initialize_card_copies(lines)
+
     for line in lines:
-        card_num, count = part_two(line)
-        add_copies(card_num, count)
-    for value in card_copies.values():
-        sum += value
+        card_num, wins = card_num_and_wins(line)
+        # Part 1
+        if wins != 0:
+            part_one += 2 ** (wins-1)
+        # Part 2
+        card_num, wins = card_num_and_wins(line)
+        add_copies(card_num, wins, card_copies)
     
-    print(sum)
+    for value in card_copies.values():
+        part_two += value
+    
+    print(f'Part One: {part_one}')
+    print(f'Part Two: {part_two}')
     
 if __name__ == "__main__":
     main()
