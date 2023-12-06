@@ -1,6 +1,7 @@
 def read_input():
-    with open("inputs\input_d3.txt") as f:
+    with open("..\inputs\input_d3.txt") as f:
         return f.read().splitlines()
+
 
 # Find special indices and gears
 def find_special_indices(lines):
@@ -11,40 +12,42 @@ def find_special_indices(lines):
         for j, symbol in enumerate(line):
             adj_nums = []
             # Found a Special Character
-            if symbol != '.' and not symbol.isdigit():
+            if symbol != "." and not symbol.isdigit():
                 adj_nums = find_adj_nums(lines, i, j)
                 sums = sum_adj_nums(lines, i, adj_nums, symbol)
                 p1_sum += sums[0]
                 p2_sum += sums[1]
-            
+
     return p1_sum, p2_sum
+
 
 # Find all adjacent number indices
 def find_adj_nums(lines, sp_i, sp_j):
     adj_nums = []
     # Adj Top Row
-    if lines[sp_i-1][sp_j-1].isdigit():
-        adj_nums.append([sp_i-1,sp_j-1])
-    if lines[sp_i-1][sp_j].isdigit():
-        adj_nums.append([sp_i-1,sp_j])
-    if lines[sp_i-1][sp_j+1].isdigit():
-        adj_nums.append([sp_i-1,sp_j+1])
-    
+    if lines[sp_i - 1][sp_j - 1].isdigit():
+        adj_nums.append([sp_i - 1, sp_j - 1])
+    if lines[sp_i - 1][sp_j].isdigit():
+        adj_nums.append([sp_i - 1, sp_j])
+    if lines[sp_i - 1][sp_j + 1].isdigit():
+        adj_nums.append([sp_i - 1, sp_j + 1])
+
     # Adj Mid Row
-    if lines[sp_i][sp_j-1].isdigit():
-        adj_nums.append([sp_i,sp_j-1])
-    if lines[sp_i][sp_j+1].isdigit():
-        adj_nums.append([sp_i,sp_j+1])
+    if lines[sp_i][sp_j - 1].isdigit():
+        adj_nums.append([sp_i, sp_j - 1])
+    if lines[sp_i][sp_j + 1].isdigit():
+        adj_nums.append([sp_i, sp_j + 1])
 
     # Adj Bot Row
-    if lines[sp_i+1][sp_j-1].isdigit():
-        adj_nums.append([sp_i+1,sp_j-1])
-    if lines[sp_i+1][sp_j].isdigit():
-        adj_nums.append([sp_i+1,sp_j])
-    if lines[sp_i+1][sp_j+1].isdigit():
-        adj_nums.append([sp_i+1,sp_j+1])
+    if lines[sp_i + 1][sp_j - 1].isdigit():
+        adj_nums.append([sp_i + 1, sp_j - 1])
+    if lines[sp_i + 1][sp_j].isdigit():
+        adj_nums.append([sp_i + 1, sp_j])
+    if lines[sp_i + 1][sp_j + 1].isdigit():
+        adj_nums.append([sp_i + 1, sp_j + 1])
 
     return adj_nums
+
 
 # Get the final sums of adjacent numbers for Part One and Part Two
 def sum_adj_nums(lines, sp_i, adj_nums, special_symbol):
@@ -54,7 +57,7 @@ def sum_adj_nums(lines, sp_i, adj_nums, special_symbol):
     gear_nums = []
 
     # Only go through rows directly above, equal to, or directly below special row
-    for i in range(sp_i-1, sp_i+2):
+    for i in range(sp_i - 1, sp_i + 2):
         j = 0
         # Iterate through each column
         while j < len(lines[i]):
@@ -67,9 +70,9 @@ def sum_adj_nums(lines, sp_i, adj_nums, special_symbol):
                 num, j, is_adj = extract_number(lines, i, j, adj_nums)
             # Add num to sum if it was adjacent
             if is_adj:
-                p1_sum += int(num) 
+                p1_sum += int(num)
             # Add num to gear_nums if it was a gear
-            if is_adj and special_symbol == '*':
+            if is_adj and special_symbol == "*":
                 gear_nums.append(int(num))
 
             j += 1
@@ -80,7 +83,8 @@ def sum_adj_nums(lines, sp_i, adj_nums, special_symbol):
 
     return p1_sum, p2_gear_ratio
 
-# Get the number in the line    
+
+# Get the number in the line
 def extract_number(lines, i, j, adj_nums):
     is_adj = False
     symbol = lines[i][j]
@@ -90,7 +94,7 @@ def extract_number(lines, i, j, adj_nums):
         num += symbol
         # Check if the number is adjacent to a special symbol
         if [i, j] in adj_nums:
-            is_adj = True 
+            is_adj = True
 
         j += 1
         # Move to next symbol
@@ -98,18 +102,16 @@ def extract_number(lines, i, j, adj_nums):
             symbol = lines[i][j]
         except IndexError:
             break
-    
+
     return num, j, is_adj
 
-# Part One: 01:35:27  10117
-# Part Two: 01:47:26   8040
+
 def main():
     lines = read_input()
-    
     part_one, part_two = find_special_indices(lines)
     print("Part One:", part_one)
     print("Part Two:", part_two)
 
-    
+
 if __name__ == "__main__":
     main()
