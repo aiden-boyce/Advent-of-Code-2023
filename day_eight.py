@@ -51,12 +51,56 @@ def part_one(choices, paths):
     return steps
 
 
+# Given a source, follow the next direction choice
+def p2_follow_paths(source, choices, paths, steps):
+    # Base Case
+    if source.endswith("Z"):
+        return source, steps
+
+    choice = choices[0]
+    choices = choices[1:] + choice
+
+    destinations = paths[source]
+    if choice == "L":
+        return p2_follow_paths(destinations[0], choices, paths, steps + 1)
+    if choice == "R":
+        return p2_follow_paths(destinations[1], choices, paths, steps + 1)
+
+
+def part_two(choices, paths):
+    sources_XXA = []
+    # Find all sources that end with "A"
+    for source in paths.keys():
+        if source.endswith("A"):
+            sources_XXA.append(source)
+
+    total_steps = 0
+    current_sources = []
+    # Loop through all sources_XXA
+    while True:
+        all_XXZ = True
+        for source in sources_XXA:
+            source, steps = p2_follow_paths(source, choices, paths, 0)
+            current_sources.append(source)
+            total_steps += steps
+        for source in current_sources:
+            if not source.endswith("Z"):
+                all_XXZ = False
+                break
+        if all_XXZ:
+            break
+    print(current_sources)
+    return total_steps
+
+
 def main():
     lines = read_input()
     # Part One
     choices, paths = get_paths(lines)
-    part_one_steps = part_one(choices, paths)
-    print(f"Part One Steps: {part_one_steps}")
+    # part_one_steps = part_one(choices, paths)
+    # print(f"Part One Steps: {part_one_steps}")
+    part_two_steps = part_two(choices, paths)
+    print(f"Part Two Steps: {part_two_steps}")
 
 
 if __name__ == "__main__":
