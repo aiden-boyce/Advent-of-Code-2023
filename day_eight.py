@@ -19,8 +19,9 @@ def get_paths(lines):
     return choices, paths
 
 
-# Follow from
+# Given a source, follow the next direction choice
 def follow_paths(source, end_goal, choices, paths, steps):
+    # Base Cases
     if source == end_goal:
         return source, steps
     if choices == "":
@@ -31,20 +32,31 @@ def follow_paths(source, end_goal, choices, paths, steps):
     destinations = paths[source]
     if choice == "L":
         return follow_paths(destinations[0], end_goal, choices[1:], paths, steps + 1)
-    elif choice == "R":
+    if choice == "R":
         return follow_paths(destinations[1], end_goal, choices[1:], paths, steps + 1)
+
+
+# Just to run part one in its own function
+def part_one(choices, paths):
+    # Starting at "AAA"
+    source = "AAA"
+    # Ending at "ZZZ"
+    end_goal = "ZZZ"
+
+    steps = 0
+    # Continue looping until landed in the final state
+    while source != end_goal:
+        source, steps = follow_paths(source, end_goal, choices, paths, steps)
+
+    return steps
 
 
 def main():
     lines = read_input()
+    # Part One
     choices, paths = get_paths(lines)
-    source = "AAA"
-    end_goal = "ZZZ"
-    steps = 0
-    while source != end_goal:
-        source, steps = follow_paths(source, end_goal, choices, paths, steps)
-
-    print(source, steps)
+    part_one_steps = part_one(choices, paths)
+    print(f"Part One Steps: {part_one_steps}")
 
 
 if __name__ == "__main__":
