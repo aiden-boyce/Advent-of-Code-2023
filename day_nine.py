@@ -41,38 +41,28 @@ def find_differences(values, step, all_values):
     return find_differences(next_values, step + 1, all_values)
 
 
-def p1_extrapolate(all_values):
-    last_diff = 0
-    # Go through the keys backwards
+# Extrapolate both Part One and Part Two
+def extrapolate(all_values):
+    p1_diff = 0
+    p2_diff = 0
+    # Go through keys backwards
     for key in list(all_values.keys())[::-1]:
-        # Get the current difference list
         diff_lst = all_values[key]
+        # Part One
         last_value = diff_lst[-1]
-        # Get the next difference: last_diff + last_value
-        next_diff = last_diff + last_value
-        # Add it to the dictionary cuz why not
-        all_values[key].append(next_diff)
-        # Update last_diff
-        last_diff = next_diff
-
-    return last_diff
-
-
-def p2_extrapolate(all_values):
-    last_diff = 0
-    # Go through the keys backwards
-    for key in list(all_values.keys())[::-1]:
-        # Get the current difference list
-        diff_lst = all_values[key]
+        # Part Two
         first_value = diff_lst[0]
-        # Get the next difference: first_value - last_diff
-        next_diff = first_value - last_diff
-        # Add it to dictionary cuz why not
-        all_values[key].insert(0, next_diff)
-        # Update last_diff
-        last_diff = next_diff
 
-    return last_diff
+        # Get the Part One difference: p1_diff + last_value
+        p1_diff = p1_diff + last_value
+        # Get the Part Two difference: first_value - p2_diff
+        p2_diff = first_value - p2_diff
+
+        # Add the values to dictionary cuz why not
+        all_values[key].append(p1_diff)
+        all_values[key].insert(0, p2_diff)
+
+    return p1_diff, p2_diff
 
 
 def main():
@@ -82,8 +72,9 @@ def main():
     for line in lines:
         line = convert_line_to_int(line.split())
         all_values = find_differences(line, 0, {})
-        p1_sum += p1_extrapolate(all_values)
-        p2_sum += p2_extrapolate(all_values)
+        p1, p2 = extrapolate(all_values)
+        p1_sum += p1
+        p2_sum += p2
 
     print(f"Part One: {p1_sum}")
     print(f"Part Two: {p2_sum}")
