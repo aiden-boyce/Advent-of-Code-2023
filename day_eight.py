@@ -53,18 +53,20 @@ def part_one(choices, paths):
 
 # Given a source, follow the next direction choice
 def p2_follow_paths(source, choices, paths, steps):
-    # Base Case
-    if source.endswith("Z"):
-        return source, steps
+    while not source.endswith("Z"):
+        # Get the direction choice
+        choice = choices[0]
+        choices = choices[1:] + choice
 
-    choice = choices[0]
-    choices = choices[1:] + choice
+        destinations = paths[source]
+        if choice == "L":
+            source = destinations[0]
+        elif choice == "R":
+            source = destinations[1]
 
-    destinations = paths[source]
-    if choice == "L":
-        return p2_follow_paths(destinations[0], choices, paths, steps + 1)
-    if choice == "R":
-        return p2_follow_paths(destinations[1], choices, paths, steps + 1)
+        steps += 1
+
+    return source, steps
 
 
 def part_two(choices, paths):
@@ -77,10 +79,11 @@ def part_two(choices, paths):
     total_steps = 0
     current_sources = []
     # Loop through all sources_XXA
+    steps = 0
     while True:
         all_XXZ = True
         for source in sources_XXA:
-            source, steps = p2_follow_paths(source, choices, paths, 0)
+            source, steps = p2_follow_paths(source, choices, paths, steps)
             current_sources.append(source)
             total_steps += steps
         for source in current_sources:
@@ -89,7 +92,7 @@ def part_two(choices, paths):
                 break
         if all_XXZ:
             break
-    print(current_sources)
+
     return total_steps
 
 
