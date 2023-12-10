@@ -1,3 +1,6 @@
+from math import gcd
+
+
 def read_input():
     with open("..\inputs\input_d8.txt") as f:
         return f.read().splitlines()
@@ -53,7 +56,7 @@ def part_one(choices, paths):
 
 # Given a source, follow the next direction choice
 def p2_follow_paths(source, choices, paths, steps):
-    while not source.endswith("Z"):
+    while not source.endswith("Z") or steps == 0:
         # Get the direction choice
         choice = choices[0]
         choices = choices[1:] + choice
@@ -76,32 +79,46 @@ def part_two(choices, paths):
         if source.endswith("A"):
             sources_XXA.append(source)
 
-    total_steps = 0
-    current_sources = []
-    # Loop through all sources_XXA
-    steps = 0
-    while True:
-        all_XXZ = True
-        for source in sources_XXA:
-            source, steps = p2_follow_paths(source, choices, paths, steps)
-            current_sources.append(source)
-            total_steps += steps
-        for source in current_sources:
-            if not source.endswith("Z"):
-                all_XXZ = False
-                break
-        if all_XXZ:
-            break
+    # Go through each source that ends with A
+    # Find the cycles for each path
+    cycles = []
+    for source in sources_XXA:
+        cycle = []
+        steps = 0
+        first_z = None
 
-    return total_steps
+        # Find the length of each cycle
+        while True:
+            # Go to source that ends with Z
+            source_z, steps = p2_follow_paths(source, choices, paths, steps)
+            cycle.append(steps)
+            # Save first source_z found
+            if first_z is None:
+                first_z = source_z
+                steps = 0
+            # Found first_z again so cycle found
+            elif source_z == first_z:
+                break
+
+        cycles.append(cycle)
+
+    # The cycle length is the same as A -> First_Z and First_Z -> First_Z
+    cycle_lengths = [cycle[0] for cycle in cycles]
+
+    # Get the least common multiple of all the cycle lengths
+    lcm = cycle_lengths.pop()
+    for num in cycle_lengths:
+        lcm = (lcm * num) // gcd(lcm, num)
+
+    return lcm
 
 
 def main():
     lines = read_input()
     # Part One
     choices, paths = get_paths(lines)
-    # part_one_steps = part_one(choices, paths)
-    # print(f"Part One Steps: {part_one_steps}")
+    part_one_steps = part_one(choices, paths)
+    print(f"Part One Steps: {part_one_steps}")
     part_two_steps = part_two(choices, paths)
     print(f"Part Two Steps: {part_two_steps}")
 
