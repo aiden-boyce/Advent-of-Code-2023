@@ -125,8 +125,7 @@ def part_one(maps):
         location = mapped_seed[-1]
         min_location = min(min_location, location)
 
-    print(min_location)
-    return src_to_dst
+    return min_location
 
 
 def main():

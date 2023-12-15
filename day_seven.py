@@ -41,10 +41,16 @@ def hand_type(hand):
             return 1
 
 
-def compare_hands(hands):
+def radix_sort_hands(hands):
     # A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, 2
     strength_values = {"A": 14, "K": 13, "Q": 12, "J": 11, "T": 10}
-    hands.sort()
+    unsorted = []
+    max_cards = 5
+    i = 0
+    while i < max_cards:
+        j = 0
+        while j < len(hands):
+            idk_bro = 0
     print(hands)
 
 
@@ -52,7 +58,7 @@ def rank_hands(hands_dict):
     ranked_hands = {}
     hand_strength = 1
     for strength in hands_dict:
-        compare_hands(hands_dict[strength])
+        radix_sort_hands(hands_dict[strength])
 
 
 def make_hands_dict():
